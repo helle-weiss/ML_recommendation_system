@@ -20,11 +20,14 @@ In order to run this project, you will need the following libraries:
 
 The files `run.ipynb` and `run.py` are equivalent. Simply run any of them without changing anything to get the same results: this will use the trained models. If you want to train the models again yourself, change the boolean `load_models` to `False` in the beginning of the `run` file. The training will take some time.
 
+## Data
+
+In this project, 10000 users rate 1000 items, for example movies, from 1 to 5. The data consists of these ratings, given by users to movies, and the goal is to predict new ratings. 
+The training set is a [1176952 x 2] matrix, where the first column consists of the users' and movies' indices and the second column consists of ratings. The entries of the first column are in the following format: `rXcY`, where `X` and `Y` are integers; this means that a user `X` has rated an item `Y`. The item in the second column and the same row represents the corresponding rating.
+
 ## Files organization
 
 The content of this project is composed of several folders and files:
-
-#### Data
 
    - `data/`:
       - `data_train.csv`: the dataset used for training. It is not made public, but is necessary to run the project.
