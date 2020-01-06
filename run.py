@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import pickle
 
 from helpers import *
@@ -14,43 +11,25 @@ from surprise.model_selection import train_test_split
 get_ipython().run_line_magic('load_ext', 'autoreload')
 get_ipython().run_line_magic('autoreload', '2')
 
-
-# In[2]:
-
-
 seed = 1
 load_models = True # If False, will run them instead (takes time!)
 
 
-# ## Load and explore data
-
-# In[3]:
-
+# Load and explore data
 
 train_path = "data/data_train.csv"
 test_path = "data/data_test.csv"
-
-
-# In[4]:
-
 
 # training data
 data = load_data(train_path)
 # submission data
 data_to_predict = load_data(test_path)
 
-
-# In[5]:
-
-
 fig_folder = 'figures/'
 explore_data(data, fig_folder)
 
 
-# ## Prepare the format of the data
-
-# In[6]:
-
+# Prepare the format of the data
 
 # get data ready for Surprise format
 data_surprise = transform_surprise(data)
@@ -62,28 +41,17 @@ final_test = transform_surprise(data_to_predict)
 final_test = final_test.build_full_trainset().build_testset()
 final_test = sorted(final_test, key=lambda x: (x[1], x[0]))
 
-
-# In[7]:
-
-
 # format for ALS and SGD:
 train_matrix = sparse_matrix(train)
 final_train_matrix = sparse_matrix(final_train)
 test_matrix = separate_indices(test)
 final_test_matrix = separate_indices(final_test)
 
-
-# In[8]:
-
-
 # the ratings of the test set
 test_ratings = test_matrix[2]
 
 
-# ## Run or load the models
-
-# In[9]:
-
+# Run or load the models
 
 if load_models:
     
@@ -178,13 +146,10 @@ else:
     pickle.dump(final_prediction_slopeOne, open('final_models/prediction_slopeOne.pkl', 'wb'))
 
 
-# ## Model blending
-
-# In[10]:
-
+# Model blending
 
 # training set
-models = [prediction_ALS, prediction_SGD, prediction_baseline, prediction_baseline_user, prediction_baseline_item, prediction_basicKNN, prediction_meansKNN, prediction_zscore_item, prediction_SVD, prediction_SVDpp, prediction_NMF, prediction_slopeOne]
+models = [prediction_ALS, prediction_baseline, prediction_slopeOne, prediction_SVDpp, prediction_SVD, prediction_baseline_item, prediction_NMF, prediction_meansKNN, prediction_zscore_item, prediction_SGD, prediction_basicKNN]
 
 blending = np.zeros(models[0].shape) # initialize
 for m in models:
@@ -192,12 +157,8 @@ for m in models:
 blending = np.delete(blending, 0, axis=0) # remove initialization
 blending = np.transpose(blending)
 
-
-# In[11]:
-
-
 # final set
-final_models = [final_prediction_ALS, final_prediction_SGD, final_prediction_baseline, final_prediction_baseline_user, final_prediction_baseline_item, final_prediction_basicKNN, final_prediction_meansKNN, final_prediction_zscore_item, final_prediction_SVD, final_prediction_SVDpp, final_prediction_NMF, final_prediction_slopeOne]
+final_models = [final_prediction_ALS, final_prediction_baseline, final_prediction_slopeOne, final_prediction_SVDpp, final_prediction_SVD, final_prediction_baseline_item, final_prediction_NMF, final_prediction_meansKNN, final_prediction_zscore_item, final_prediction_SGD, final_prediction_basicKNN]
 
 final_blending = np.zeros(final_models[0].shape) # initialize
 for m in final_models:
@@ -205,17 +166,9 @@ for m in final_models:
 final_blending = np.delete(final_blending, 0, axis=0) # remove initialization
 final_blending = np.transpose(final_blending)
 
-
-# In[12]:
-
-
 # polynomial expansion
-degree = 2
+degree = 3
 blending_poly, final_blending_poly = polynomial_features(blending, final_blending, degree)
-
-
-# In[13]:
-
 
 # establish weights for each model
 ridge = True
@@ -228,17 +181,8 @@ else:
     final_result = neural_net(blending_poly, np.array(test_ratings), final_blending_poly, epochs, patience)
 
 
-# ## Submission!
+# Submission!
 
-# In[14]:
-
-
-submission_path = 'final_submission_test.csv'
+submission_path = 'final_submission.csv'
 create_submission(final_result, test_path, submission_path)
-
-
-# In[ ]:
-
-
-
 

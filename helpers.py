@@ -53,7 +53,7 @@ def explore_data(data, path):
     print('mean: ' + str(np.mean(rates_per_movie)))
 
     # ratings per users
-    fig = plt.figure(figsize=(10, 3))
+    fig = plt.figure(figsize=(12, 4))
     ax1 = fig.add_subplot(1, 2, 1)
     ax1.plot(rates_per_user.values)
     ax1.set_xlabel("Users")
