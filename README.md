@@ -1,6 +1,7 @@
 # Machine Learning — Project 2, Recommender systems
 
-This is the second project of the EPFL Machine Learning course. The goal was to make recommendations to users based on their previous ratings. The prediction was then submitted to the competition arena on [AIcrowd](https://www.aicrowd.com/challenges/epfl-ml-recommender-system-2019/leaderboards) and shared the first place with some other teams, with **RMSE 1.017**. 
+This is the second project of the EPFL Machine Learning course. The goal was to make recommendations to users based on their previous ratings. The prediction was then submitted to the competition arena on [AIcrowd](https://www.aicrowd.com/challenges/epfl-ml-recommender-system-2019/leaderboards) and shared the second place with some other teams, with **RMSE 1.017**. 
+The detailed explanations and reasoning can be found in the [report](https://github.com/helle-weiss/ML_project2/blob/master/report_nessler.pdf). 
 
 ## External libraries
 
